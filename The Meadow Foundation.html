@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Meadow Foundation Fund Application</title>
+    <style>
+        body {
+            background-image: url('https://source.unsplash.com/1600x900/?forest,trees');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 650px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            margin: 40px auto;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2e7d32;
+            font-family: 'Georgia', serif;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 12px;
+            display: block;
+            color: #2e7d32;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #9ccc65;
+            border-radius: 5px;
+            font-size: 14px;
+            background: #f1f8e9;
+        }
+
+        input[type="file"] {
+            background: #ffffff;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #388e3c;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>The Meadow Foundation Fund Application</h2>
+        <p class="subtext">Help us fund projects that drive meaningful biodiversity impact.</p>
+
+        <form id="fundingForm">
+            <label for="organization">Organization Name*</label>
+            <input type="text" id="organization" name="organization" required>
+
+            <label for="project_name">Project Name*</label>
+            <input type="text" id="project_name" name="project_name" required>
+
+            <label for="contact_name">Contact Name*</label>
+            <input type="text" id="contact_name" name="contact_name" required>
+
+            <label for="email">Email Address*</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="website">Project Website*</label>
+            <input type="url" id="website" name="website" required>
+
+            <label for="biodiversity_focus">Biodiversity Focus Area*</label>
+            <select id="biodiversity_focus" name="biodiversity_focus" required>
+                <option value="">Please Select</option>
+                <option value="Marine Conservation">Marine Conservation</option>
+                <option value="Reforestation">Reforestation</option>
+                <option value="Wildlife Protection">Wildlife Protection</option>
+                <option value="Carbon Sequestration">Carbon Sequestration</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="location">Location (Country/Region)*</label>
+            <select id="location" name="location" required>
+                <option value="">Please Select</option>
+                <option value="United States">United States</option>
+                <option value="Canada">Canada</option>
+                <option value="Europe">Europe</option>
+                <option value="South America">South America</option>
+                <option value="Africa">Africa</option>
+                <option value="Asia">Asia</option>
+                <option value="Australia">Australia</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="description">Brief Project Description (200 words max)*</label>
+            <textarea id="description" name="description" rows="4" maxlength="200" required></textarea>
+
+            <label for="challenges">What are the biggest challenges your project faces?*</label>
+            <textarea id="challenges" name="challenges" rows="4" required></textarea>
+
+            <label for="uniqueness">How is this project unique compared to similar efforts?*</label>
+            <textarea id="uniqueness" name="uniqueness" rows="4" required></textarea>
+
+            <!-- Financial Information -->
+            <label for="prior_funding">Has this project received prior funding?*</label>
+            <select id="prior_funding" name="prior_funding" required>
+                <option value="">Please Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label for="biodiversity_outcomes">What are the expected biodiversity outcomes?*</label>
+            <select id="biodiversity_outcomes" name="biodiversity_outcomes" required>
+                <option value="">Please Select</option>
+                <option value="Increase local biodiversity">Increase local biodiversity</option>
+                <option value="Prevent habitat loss">Prevent habitat loss</option>
+                <option value="Improve carbon capture">Improve carbon capture</option>
+                <option value="Enhance community engagement">Enhance community engagement</option>
+            </select>
+
+            <!-- File Uploads -->
+            <label for="pitch_deck">Project Pitch Deck*</label>
+            <input type="file" id="pitch_deck" name="pitch_deck" required>
+
+            <label for="research">Supporting Research or Reports</label>
+            <input type="file" id="research" name="research">
+
+            <button type="submit">Submit Application</button>
+    </div>
+
+    <script>
+        document.getElementById("fundingForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+    
+            const formData = new FormData(this);
+    
+            try {
+                console.log("Sending request to API Gateway");
+    
+                const response = await fetch("https://ofb1i9w9zd.execute-api.us-east-2.amazonaws.com/prod", {
+                    method: "POST",
+                    body: formData
+                });
+    
+                console.log("Response received:", response);
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("API Error:", errorData);
+                    alert(`Error: ${errorData.error || "Unknown error occurred"}`);
+                    return;
+                }
+    
+                const result = await response.json();
+                alert(result.message);
+                document.getElementById("fundingForm").reset();
+    
+            } catch (error) {
+                console.error("Fetch error:", error);
+                alert(`Error submitting form: ${error.message}`);
+            }
+        });
+    </script>
+    
+
+</body>
+</html>
